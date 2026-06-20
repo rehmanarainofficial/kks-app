@@ -40,7 +40,7 @@ const SaleTaskScreen = ({ navigation, route }) => {
 
   const [activeTab, setActiveTab] = useState(
     route.params?.initialTab || 'plan',
-  ); 
+  );
 
   useEffect(() => {
     if (route.params?.initialTab) {
@@ -83,8 +83,10 @@ const SaleTaskScreen = ({ navigation, route }) => {
     { data: progressStatusRes, isLoading: progressStatusLoading },
   ] = useGetSalesProgressStatusMutation();
   const [deleteDailyWorkingPlan] = useDeleteDailyWorkingPlanMutation();
-  const [getProductPlanCategory, { data: prodCatRes, isLoading: prodCatLoading }] =
-    useGetProductPlanCategoryDropdownMutation();
+  const [
+    getProductPlanCategory,
+    { data: prodCatRes, isLoading: prodCatLoading },
+  ] = useGetProductPlanCategoryDropdownMutation();
 
   const [dailyPlans, setDailyPlans] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -116,7 +118,13 @@ const SaleTaskScreen = ({ navigation, route }) => {
       getProductPlanCategory({ user_id: user?.id });
       fetchDailyPlan();
     }
-  }, [user?.id, getSalesCategory, getHospital, getProductPlanCategory, fetchDailyPlan]);
+  }, [
+    user?.id,
+    getSalesCategory,
+    getHospital,
+    getProductPlanCategory,
+    fetchDailyPlan,
+  ]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -156,7 +164,7 @@ const SaleTaskScreen = ({ navigation, route }) => {
       const response = await addDailyWorkingPlan({
         id: '0',
         user_id: user?.id,
-        code: user?.emp_code,
+        code: user?.emp_code || user?.user_id,
         activity_date: getCurrentDate(),
         category: selectedCategory,
         activity: selectedActivity,
@@ -305,7 +313,6 @@ const SaleTaskScreen = ({ navigation, route }) => {
         return;
       }
 
-
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -318,7 +325,7 @@ const SaleTaskScreen = ({ navigation, route }) => {
       const response = await addDailyWorkingPlan({
         id: selectedTask.id,
         user_id: user?.id,
-        emp_code: user?.emp_code,
+        code: user?.user_code || user?.user_id,
         activity: selectedStatusObj?.description || '',
         activity_id: selectedProgressStatusId,
         evening_remarks: eveningRemarks,
@@ -408,9 +415,11 @@ const SaleTaskScreen = ({ navigation, route }) => {
         .replace(/&gt;/g, '>');
     };
 
-    const productCategoryName = prodCatRes?.data?.find(
-      c => c.category_id === item.product_category
-    )?.description || item.product_category_name || item.product_category;
+    const productCategoryName =
+      prodCatRes?.data?.find(c => c.category_id === item.product_category)
+        ?.description ||
+      item.product_category_name ||
+      item.product_category;
 
     return (
       <View style={styles.card}>
@@ -496,7 +505,9 @@ const SaleTaskScreen = ({ navigation, route }) => {
                 },
               ]}
             >
-              {item.progress_status === '0' ? 'Pending' : (item.progress_name || 'Completed')}
+              {item.progress_status === '0'
+                ? 'Pending'
+                : item.progress_name || 'Completed'}
             </Text>
           </View>
 

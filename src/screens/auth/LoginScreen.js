@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    company: 'CRM',
+    company: 'KKS',
   });
 
   const [errors, setErrors] = useState({

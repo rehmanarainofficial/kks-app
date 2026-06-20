@@ -16,15 +16,11 @@ import { logout, selectCurrentUser } from '@store/slices/authSlice';
 import { useTheme } from '@config/useTheme';
 import { useToggleErpStatusMutation } from '@api/baseApi';
 import Toast from 'react-native-toast-message';
-import DailyActivitiesSlider from '@components/dashboard/DailyActivitiesSlider';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const HEADER_HEIGHT =
   Platform.OS === 'ios' ? SCREEN_HEIGHT * 0.24 : SCREEN_HEIGHT * 0.21;
 
-/**
- * MainScreen - Professional ERP Dashboard with Grid Navigation
- */
 const MainScreen = ({ navigation }) => {
   const { theme } = useTheme();
   const dispatch = useDispatch();
@@ -35,32 +31,6 @@ const MainScreen = ({ navigation }) => {
 
   const [systemEnabled, setSystemEnabled] = useState(true);
   const [selectedMenuCompany, setSelectedMenuCompany] = useState(null);
-
-  // const companyCards = [
-  //   {
-  //     id: 'SaleManagement',
-  //     name: 'Sale Management',
-  //     icon: 'briefcase-outline',
-  //   },
-  //   { id: 'Anwar & Sons', name: 'Anwar & Sons', icon: 'location-outline' },
-  //   {
-  //     id: 'Kunhar Distribution',
-  //     name: 'Kunhar Distribution',
-  //     icon: 'location-outline',
-  //   },
-  //   {
-  //     id: 'KMED Rawalpindi',
-  //     name: 'KMED Rawalpindi',
-  //     icon: 'location-outline',
-  //   },
-  //   { id: 'KMED Lahore', name: 'KMED Lahore', icon: 'location-outline' },
-  //   {
-  //     id: 'KMED Faisalabad',
-  //     name: 'KMED Faisalabad',
-  //     icon: 'location-outline',
-  //   },
-  //   { id: 'KMED Karachi', name: 'KMED Karachi', icon: 'location-outline' },
-  // ];
 
   const orderActions = [
     {
@@ -82,19 +52,6 @@ const MainScreen = ({ navigation }) => {
       id: 'payment',
       title: 'PAYMENT',
       icon: 'cash-outline',
-    },
-  ];
-
-  const crmActions = [
-    {
-      id: 'hospital',
-      title: 'HOSPITALS',
-      icon: 'business-outline',
-    },
-    {
-      id: 'contact',
-      title: 'CONTACTS',
-      icon: 'people-outline',
     },
   ];
 
@@ -217,28 +174,6 @@ const MainScreen = ({ navigation }) => {
   //   },
   // ];
 
-  const dynamicStyles = getStyles(theme);
-
-  // const renderCompanyCard = item => (
-  //   <TouchableOpacity
-  //     key={item.id}
-  //     style={dynamicStyles.companyCard}
-  //     activeOpacity={0.7}
-  //     onPress={() => {
-  //       if (item.id === 'SaleManagement') {
-  //         navigation.navigate('SaleManagement');
-  //       } else {
-  //         setSelectedMenuCompany(item.id);
-  //       }
-  //     }}
-  //   >
-  //     <View style={dynamicStyles.companyIconContainer}>
-  //       <Icon name={item.icon} size={40} color={theme.colors.primary} />
-  //     </View>
-  //     <Text style={dynamicStyles.companyCardName}>{item.name}</Text>
-  //   </TouchableOpacity>
-  // );
-
   const handleActionPress = item => {
     if (item.id === 'new_order') {
       navigation.navigate('SalesGenerateOrderScreen');
@@ -261,19 +196,29 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
-  // const renderTile = item => (
-  //   <TouchableOpacity
-  //     key={item.id}
-  //     style={dynamicStyles.gridBox}
-  //     activeOpacity={0.7}
-  //     onPress={() => navigation.navigate(item.screen)}
-  //   >
-  //     <View style={dynamicStyles.iconContainer}>
-  //       <Icon name={item.icon} size={30} color={theme.colors.primary} />
-  //     </View>
-  //     <Text style={dynamicStyles.boxName}>{item.name}</Text>
-  //   </TouchableOpacity>
-  // );
+  const dynamicStyles = getStyles(theme);
+
+  const todayDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+  });
+
+  const renderCard = action => (
+    <TouchableOpacity
+      key={action.id}
+      style={dynamicStyles.gridItem}
+      onPress={() => handleActionPress(action)}
+      activeOpacity={0.7}
+    >
+      <View style={dynamicStyles.iconContainer}>
+        <Icon name={action.icon} size={22} color={theme.colors.primary} />
+      </View>
+      <View style={dynamicStyles.textContainer}>
+        <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={dynamicStyles.container}>
@@ -304,17 +249,6 @@ const MainScreen = ({ navigation }) => {
               </Text>
             </View>
             <View style={dynamicStyles.headerActions}>
-              {/* <TouchableOpacity
-                style={dynamicStyles.iconBtn}
-                onPress={handleToggleSystem}
-              >
-                <Icon
-                  name={systemEnabled ? 'power' : 'power-outline'}
-                  size={24}
-                  color={systemEnabled ? '#4ADE80' : 'rgba(255,255,255,0.5)'}
-                />
-              </TouchableOpacity> */}
-
               {/* Notification Bell */}
               <TouchableOpacity style={dynamicStyles.iconBtn}>
                 <Icon name="notifications-outline" size={24} color="#FFFFFF" />
@@ -339,6 +273,7 @@ const MainScreen = ({ navigation }) => {
             <Text style={dynamicStyles.userName}>
               Welcome back, {user?.user_id || 'User'}
             </Text>
+            <Text style={dynamicStyles.dateText}>{todayDate}</Text>
           </View>
         </SafeAreaView>
       </View>
@@ -348,154 +283,52 @@ const MainScreen = ({ navigation }) => {
         contentContainerStyle={dynamicStyles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* TOP ROW: ATTENDANCE, PLAN, PROGRESS */}
-        <View style={dynamicStyles.topActionsRow}>
-          <TouchableOpacity
-            style={dynamicStyles.topActionCard}
-            onPress={() => navigation.navigate('HCMAttendance')}
-          >
+        {/* ATTENDANCE SECTION (Beautiful full-width banner) */}
+        <TouchableOpacity
+          style={dynamicStyles.attendanceCard}
+          onPress={() => navigation.navigate('HCMAttendance')}
+          activeOpacity={0.7}
+        >
+          <View style={dynamicStyles.attendanceIconContainer}>
             <Icon
               name="calendar-number"
               size={24}
-              color={theme.colors.primary}
+              color={theme.colors.success}
             />
-            <Text style={dynamicStyles.topActionTitle}>
-              Mark{'\n'}Attendance
+          </View>
+          <View style={dynamicStyles.attendanceTextContainer}>
+            <Text style={dynamicStyles.attendanceTitle}>Mark Attendance</Text>
+            <Text style={dynamicStyles.attendanceSubtitle}>
+              Tap to check-in or out for the day
             </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={dynamicStyles.topActionCard}
-            onPress={() =>
-              navigation.navigate('SaleTask', {
-                initialTab: 'plan',
-                showTabs: false,
-              })
-            }
-          >
-            <Icon name="list-outline" size={24} color={theme.colors.primary} />
-            <Text style={dynamicStyles.topActionTitle}>TODAYS{'\n'}PLAN</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={dynamicStyles.topActionCard}
-            onPress={() =>
-              navigation.navigate('SaleTask', {
-                initialTab: 'progress',
-                showTabs: false,
-              })
-            }
-          >
-            <Icon
-              name="trending-up-outline"
-              size={24}
-              color={theme.colors.primary}
-            />
-            <Text style={dynamicStyles.topActionTitle}>
-              TODAYS{'\n'}PROGRESS
-            </Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+          <Icon
+            name="chevron-forward-outline"
+            size={18}
+            color={theme.colors.textSecondary}
+          />
+        </TouchableOpacity>
 
         {/* ORDERS SECTION */}
         <Text style={dynamicStyles.sectionHeader}>ORDERS</Text>
         <View style={dynamicStyles.gridRow}>
-          {orderActions.slice(0, 2).map(action => (
-            <TouchableOpacity
-              key={action.id}
-              style={dynamicStyles.gridItem}
-              onPress={() => handleActionPress(action)}
-            >
-              <Icon
-                name={action.icon}
-                size={20}
-                color={theme.colors.primary}
-                style={dynamicStyles.gridIcon}
-              />
-              <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {orderActions.slice(0, 2).map(action => renderCard(action))}
         </View>
         <View style={dynamicStyles.gridRow}>
-          {orderActions.slice(2, 4).map(action => (
-            <TouchableOpacity
-              key={action.id}
-              style={dynamicStyles.gridItem}
-              onPress={() => handleActionPress(action)}
-            >
-              <Icon
-                name={action.icon}
-                size={20}
-                color={theme.colors.primary}
-                style={dynamicStyles.gridIcon}
-              />
-              <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* CRM SECTION */}
-        <Text style={dynamicStyles.sectionHeader}>CRM</Text>
-        <View style={dynamicStyles.gridRow}>
-          {crmActions.map(action => (
-            <TouchableOpacity
-              key={action.id}
-              style={dynamicStyles.gridItem}
-              onPress={() => handleActionPress(action)}
-            >
-              <Icon
-                name={action.icon}
-                size={20}
-                color={theme.colors.primary}
-                style={dynamicStyles.gridIcon}
-              />
-              <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {orderActions.slice(2, 4).map(action => renderCard(action))}
         </View>
 
         {/* REPORTS SECTION */}
         <Text style={dynamicStyles.sectionHeader}>REPORTS</Text>
         <View style={dynamicStyles.gridRow}>
-          {reportActions.map(action => (
-            <TouchableOpacity
-              key={action.id}
-              style={dynamicStyles.gridItem}
-              onPress={() => handleActionPress(action)}
-            >
-              <Icon
-                name={action.icon}
-                size={20}
-                color={theme.colors.primary}
-                style={dynamicStyles.gridIcon}
-              />
-              <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {reportActions.map(action => renderCard(action))}
         </View>
 
         {/* FIELD EXPENSE & SAMPLE SECTION */}
         <Text style={dynamicStyles.sectionHeader}>FIELD EXPENSE & SAMPLE</Text>
         <View style={dynamicStyles.gridRow}>
-          {expense.map(item => (
-            <TouchableOpacity
-              key={item.id}
-              style={dynamicStyles.gridItem}
-              onPress={() => handleActionPress(item)}
-            >
-              <Icon
-                name={item.icon}
-                size={20}
-                color={theme.colors.primary}
-                style={dynamicStyles.gridIcon}
-              />
-              <Text style={dynamicStyles.gridItemText}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
+          {expense.map(item => renderCard(item))}
         </View>
-
-        {/* Daily Activities Slider (Moved below) */}
-        {/* <DailyActivitiesSlider /> */}
       </ScrollView>
     </View>
   );
@@ -538,21 +371,18 @@ const getStyles = theme =>
       fontWeight: '700',
       color: '#FFFFFF',
     },
+    dateText: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: 'rgba(255, 255, 255, 0.75)',
+      marginTop: 4,
+    },
     userInfoContainer: {
       marginTop: 20,
     },
     headerActions: {
       flexDirection: 'row',
       alignItems: 'center',
-    },
-    toggleWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginRight: 4,
-      backgroundColor: 'rgba(255,255,255,0.1)',
-      borderRadius: 20,
-      paddingHorizontal: 6,
-      paddingVertical: 2,
     },
     iconBtn: {
       padding: 8,
@@ -566,120 +396,52 @@ const getStyles = theme =>
       marginLeft: 8,
     },
     scrollContent: {
-      padding: 20,
-      paddingTop: 30,
+      padding: 16,
+      paddingBottom: 40,
     },
-    gridContainer: {
+    attendanceCard: {
       flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-    },
-    gridBox: {
-      width: '31%',
-      aspectRatio: 1,
-      backgroundColor: theme.colors.surface,
-      borderRadius: 20,
-      justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 15,
-      ...theme.shadows.md,
+      backgroundColor: theme.colors.surface,
+      borderRadius: 16,
+      padding: 16,
+      marginBottom: 20,
       borderWidth: 1,
       borderColor: theme.colors.border,
-    },
-    moreBox: {
-      borderStyle: 'dashed',
-      borderColor: theme.colors.primary,
-      position: 'relative',
-    },
-    moreBadge: {
-      position: 'absolute',
-      top: 8,
-      right: 8,
-      width: 18,
-      height: 18,
-      borderRadius: 9,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    moreBadgeText: {
-      color: '#FFFFFF',
-      fontSize: 10,
-      fontWeight: '800',
-    },
-    iconContainer: {
-      width: 50,
-      height: 50,
-      borderRadius: 15,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 10,
-    },
-    boxName: {
-      fontSize: 12,
-      fontWeight: '700',
-      color: theme.colors.text,
-      textAlign: 'center',
-    },
-    companyCard: {
-      width: '48%',
-      aspectRatio: 1,
-      backgroundColor: theme.colors.surface,
-      borderRadius: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 15,
-      ...theme.shadows.md,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      padding: 10,
-    },
-    companyIconContainer: {
-      width: 60,
-      height: 60,
-      borderRadius: 20,
-      backgroundColor: theme.colors.primary + '15',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 15,
-    },
-    companyCardName: {
-      fontSize: 16,
-      fontWeight: '700',
-      color: theme.colors.text,
-      textAlign: 'center',
-    },
-    topActionsRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 24,
-    },
-    topActionCard: {
-      width: '31%',
-      aspectRatio: 1,
-      backgroundColor: theme.colors.surface,
-      borderRadius: 12,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 8,
-      elevation: 3,
+      elevation: 2,
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.1,
-      shadowRadius: 2,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 3,
     },
-    topActionTitle: {
-      fontSize: 11,
+    attendanceIconContainer: {
+      width: 48,
+      height: 48,
+      borderRadius: 14,
+      backgroundColor: theme.colors.success + '15',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    attendanceTextContainer: {
+      flex: 1,
+      marginLeft: 16,
+    },
+    attendanceTitle: {
+      fontSize: 15,
       fontWeight: '800',
-      textAlign: 'center',
       color: theme.colors.text,
-      marginTop: 8,
+    },
+    attendanceSubtitle: {
+      fontSize: 12,
+      color: theme.colors.textSecondary,
+      marginTop: 2,
     },
     sectionHeader: {
-      fontSize: 16,
+      fontSize: 13,
       fontWeight: '900',
       color: theme.colors.primary,
+      letterSpacing: 1.2,
+      textTransform: 'uppercase',
       marginBottom: 12,
       marginTop: 20,
     },
@@ -690,28 +452,38 @@ const getStyles = theme =>
     },
     gridItem: {
       width: '48%',
-      height: 60,
+      height: 76,
       backgroundColor: theme.colors.surface,
-      borderRadius: 8,
+      borderRadius: 16,
       flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 12,
-      elevation: 2,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.1,
-      shadowRadius: 1,
       borderWidth: 1,
       borderColor: theme.colors.border,
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 3,
     },
-    gridIcon: {
-      marginRight: 10,
+    iconContainer: {
+      width: 44,
+      height: 44,
+      borderRadius: 12,
+      backgroundColor: theme.colors.primary + '12',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    textContainer: {
+      flex: 1,
+      marginLeft: 12,
+      justifyContent: 'center',
     },
     gridItemText: {
-      flex: 1,
-      fontSize: 11,
+      fontSize: 12,
       fontWeight: '800',
       color: theme.colors.text,
+      lineHeight: 15,
     },
   });
 

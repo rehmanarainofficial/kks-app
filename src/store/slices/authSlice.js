@@ -16,16 +16,21 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { user, company } = action.payload;
+      let { user } = action.payload;
+      if (user) {
+        user = {
+          ...user,
+          company_user_code: 'KKS',
+          company_user_id: user.id || user.company_user_id,
+        };
+      }
       state.user = user;
-      state.company = company;
+      state.company = 'KKS';
       state.isAuthenticated = true;
 
       // Persist to AsyncStorage
       AsyncStorage.setItem('user', JSON.stringify(user));
-      if (company) {
-        AsyncStorage.setItem('company', company);
-      }
+      AsyncStorage.setItem('company', 'KKS');
     },
     logout: state => {
       state.user = null;
@@ -41,10 +46,15 @@ const authSlice = createSlice({
       state.isLoading = action.payload;
     },
     restoreSession: (state, action) => {
-      const { user, company } = action.payload;
+      let { user } = action.payload;
       if (user) {
+        user = {
+          ...user,
+          company_user_code: 'KKS',
+          company_user_id: user.id || user.company_user_id,
+        };
         state.user = user;
-        state.company = company;
+        state.company = 'KKS';
         state.isAuthenticated = true;
       }
     },

@@ -47,11 +47,11 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          if (data?.user?.company_user_id) {
+          if (data?.user?.id || data?.user?.company_user_id) {
             dispatch(
               portalApi.endpoints.getDebtorsMaster.initiate({
                 company: arg.company.trim().toUpperCase(),
-                user_id: data.user.company_user_id,
+                user_id: data.user.id || data.user.company_user_id,
               })
             );
           }

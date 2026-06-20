@@ -1,19 +1,146 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_BASE_URL } from '@env';
 
+// Helpers for React Native and browser FormData manipulation
+const getFormDataValue = (formData, key) => {
+  if (!formData) return undefined;
+  if (typeof formData.get === 'function') {
+    return formData.get(key);
+  }
+  if (Array.isArray(formData._parts)) {
+    const part = formData._parts.find(p => p[0] === key);
+    return part ? part[1] : undefined;
+  }
+  return undefined;
+};
+
+const hasFormDataValue = (formData, key) => {
+  if (!formData) return false;
+  if (typeof formData.has === 'function') {
+    return formData.has(key);
+  }
+  if (Array.isArray(formData._parts)) {
+    return formData._parts.some(p => p[0] === key);
+  }
+  return false;
+};
+
+const setFormDataValue = (formData, key, value) => {
+  if (!formData) return;
+  if (typeof formData.set === 'function') {
+    formData.set(key, value);
+  } else if (Array.isArray(formData._parts)) {
+    const idx = formData._parts.findIndex(p => p[0] === key);
+    if (idx !== -1) {
+      formData._parts[idx][1] = value;
+    } else {
+      formData._parts.push([key, value]);
+    }
+  } else if (typeof formData.append === 'function') {
+    formData.append(key, value);
+  }
+};
+
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: async (args, api, extraOptions) => {
     const baseUrl = API_BASE_URL;
+
+    // Force company and company_user_code parameters to be 'KKS', unless they are 'CRM'
+    if (args && typeof args === 'object') {
+      const isFormData = args.body && (Array.isArray(args.body._parts) || typeof args.body.append === 'function');
+      // 1. If body is FormData
+      if (isFormData) {
+        if (hasFormDataValue(args.body, 'company')) {
+          const comp = getFormDataValue(args.body, 'company');
+          if (comp && comp.toString().toUpperCase() !== 'CRM') {
+            setFormDataValue(args.body, 'company', 'KKS');
+          }
+        }
+        if (hasFormDataValue(args.body, 'company_user_code')) {
+          const compCode = getFormDataValue(args.body, 'company_user_code');
+          if (compCode && compCode.toString().toUpperCase() !== 'CRM') {
+            setFormDataValue(args.body, 'company_user_code', 'KKS');
+          }
+        }
+      } 
+      // 2. If body is a plain object
+      else if (args.body && typeof args.body === 'object') {
+        if ('company' in args.body) {
+          const comp = args.body.company;
+          if (comp && comp.toString().toUpperCase() !== 'CRM') {
+            args.body.company = 'KKS';
+          }
+        }
+        if ('company_user_code' in args.body) {
+          const compCode = args.body.company_user_code;
+          if (compCode && compCode.toString().toUpperCase() !== 'CRM') {
+            args.body.company_user_code = 'KKS';
+          }
+        }
+      }
+
+      // 3. If params is a query parameter object
+      if (args.params && typeof args.params === 'object') {
+        if ('company' in args.params) {
+          const comp = args.params.company;
+          if (comp && comp.toString().toUpperCase() !== 'CRM') {
+            args.params.company = 'KKS';
+          }
+        }
+        if ('company_user_code' in args.params) {
+          const compCode = args.params.company_user_code;
+          if (compCode && compCode.toString().toUpperCase() !== 'CRM') {
+            args.params.company_user_code = 'KKS';
+          }
+        }
+      }
+    }
+
+    // Log the request details for debugging
+    if (args && typeof args === 'object') {
+      console.log('==================================================');
+      console.log(`[API REQUEST] URL: ${args.url}`);
+      console.log(`[API REQUEST] Method: ${args.method || 'GET'}`);
+      
+      // Log body
+      if (args.body) {
+        if (Array.isArray(args.body._parts)) {
+          console.log('[API REQUEST] Body (FormData):');
+          args.body._parts.forEach(([key, val]) => {
+            console.log(`  ${key}:`, val);
+          });
+        } else if (typeof args.body === 'object') {
+          console.log('[API REQUEST] Body (JSON):', JSON.stringify(args.body, null, 2));
+        } else {
+          console.log('[API REQUEST] Body (Other):', args.body);
+        }
+      }
+      
+      // Log params
+      if (args.params) {
+        console.log('[API REQUEST] Params:', JSON.stringify(args.params, null, 2));
+      }
+      console.log('==================================================');
+    }
+
     try {
       const result = await fetchBaseQuery({
         baseUrl: baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`,
       })(args, api, extraOptions);
+      
+      // Log response details
+      console.log('==================================================');
+      console.log(`[API RESPONSE] URL: ${args.url}`);
       if (result.error) {
-        console.log('[baseApi Response Error]', result.error);
+        console.log('[API RESPONSE] Error:', JSON.stringify(result.error, null, 2));
       } else {
-        console.log('[baseApi Response Success]');
+        console.log('[API RESPONSE] Success status:', result.data?.status);
+        console.log('[API RESPONSE] Data keys:', result.data ? Object.keys(result.data) : 'null');
+        console.log('[API RESPONSE] Full/Partial Data:', JSON.stringify(result.data).substring(0, 1000));
       }
+      console.log('==================================================');
+      
       return result;
     } catch (err) {
       console.error('[baseApi Catch Error]', err);

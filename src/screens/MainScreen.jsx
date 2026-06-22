@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +32,7 @@ const MainScreen = ({ navigation }) => {
 
   const [systemEnabled, setSystemEnabled] = useState(true);
   const [selectedMenuCompany, setSelectedMenuCompany] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
 
   const orderActions = [
     {
@@ -119,60 +121,66 @@ const MainScreen = ({ navigation }) => {
     dispatch(logout());
   };
 
-  // const menuItems = [
-  //   {
-  //     id: 'Dashboard',
-  //     name: 'Dashboard',
-  //     icon: 'grid-outline',
-  //     screen: 'Dashboard',
-  //   },
-  //   {
-  //     id: 'Approvals',
-  //     name: 'Approvals',
-  //     icon: 'checkmark-circle-outline',
-  //     screen: 'Approvals',
-  //   },
-  //   { id: 'Sales', name: 'Sales', icon: 'cart-outline', screen: 'Sales' },
-  //   {
-  //     id: 'Purchase',
-  //     name: 'Purchase',
-  //     icon: 'bag-handle-outline',
-  //     screen: 'Purchase',
-  //   },
-  //   {
-  //     id: 'Inventory',
-  //     name: 'Inventory',
-  //     icon: 'cube-outline',
-  //     screen: 'Inventory',
-  //   },
-  //   { id: 'HCM', name: 'HCM', icon: 'people-outline', screen: 'HCM' },
-  //   {
-  //     id: 'Manufacturing',
-  //     name: 'Manufacturing',
-  //     icon: 'settings-outline',
-  //     screen: 'Manufacturing',
-  //   },
-  //   { id: 'CRM', name: 'CRM', icon: 'business-outline', screen: 'CRM' },
-  //   {
-  //     id: 'SalesCRM',
-  //     name: 'Sales CRM',
-  //     icon: 'trending-up-outline',
-  //     screen: 'SalesCRM',
-  //   },
-  //   { id: 'Finance', name: 'Finance', icon: 'cash-outline', screen: 'Finance' },
-  //   {
-  //     id: 'Reporting',
-  //     name: 'Reporting',
-  //     icon: 'bar-chart-outline',
-  //     screen: 'Reporting',
-  //   },
-  //   {
-  //     id: 'VoidTransactions',
-  //     name: 'Reversal Transactions',
-  //     icon: 'refresh-circle-outline',
-  //     screen: 'VoidTransactions',
-  //   },
-  // ];
+  const menuItems = [
+    {
+      id: 'Dashboard',
+      name: 'Dashboard',
+      icon: 'grid-outline',
+      screen: 'Dashboard',
+    },
+    {
+      id: 'Approvals',
+      name: 'Approvals',
+      icon: 'checkmark-circle-outline',
+      screen: 'Approvals',
+    },
+    { id: 'Sales', name: 'Sales', icon: 'cart-outline', screen: 'Sales' },
+    {
+      id: 'Purchase',
+      name: 'Purchase',
+      icon: 'bag-handle-outline',
+      screen: 'Purchase',
+    },
+    {
+      id: 'Inventory',
+      name: 'Inventory',
+      icon: 'cube-outline',
+      screen: 'Inventory',
+    },
+    { id: 'HCM', name: 'HCM', icon: 'people-outline', screen: 'HCM' },
+    {
+      id: 'Manufacturing',
+      name: 'Manufacturing',
+      icon: 'settings-outline',
+      screen: 'Manufacturing',
+    },
+    { id: 'CRM', name: 'CRM', icon: 'business-outline', screen: 'CRM' },
+    {
+      id: 'SalesCRM',
+      name: 'Sales CRM',
+      icon: 'trending-up-outline',
+      screen: 'SalesCRM',
+    },
+    { id: 'Finance', name: 'Finance', icon: 'cash-outline', screen: 'Finance' },
+    {
+      id: 'Reporting',
+      name: 'Reporting',
+      icon: 'bar-chart-outline',
+      screen: 'Reporting',
+    },
+    {
+      id: 'VoidTransactions',
+      name: 'Reversal Transactions',
+      icon: 'refresh-circle-outline',
+      screen: 'VoidTransactions',
+    },
+    {
+      id: 'Tracking',
+      name: 'Tracking',
+      icon: 'location-outline',
+      screen: 'TrackingScreen',
+    },
+  ];
 
   const handleActionPress = item => {
     if (item.id === 'new_order') {
@@ -193,6 +201,8 @@ const MainScreen = ({ navigation }) => {
       navigation.navigate('CRMSampleRequest');
     } else if (item.id === 'sales_target') {
       navigation.navigate('CRMSalesVsTarget');
+    } else if (item.screen) {
+      navigation.navigate(item.screen);
     }
   };
 
@@ -215,10 +225,20 @@ const MainScreen = ({ navigation }) => {
         <Icon name={action.icon} size={22} color={theme.colors.primary} />
       </View>
       <View style={dynamicStyles.textContainer}>
-        <Text style={dynamicStyles.gridItemText}>{action.title}</Text>
+        <Text style={dynamicStyles.gridItemText}>
+          {action.title || action.name}
+        </Text>
       </View>
     </TouchableOpacity>
   );
+
+  const chunkArray = (arr, size) => {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+      chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+  };
 
   return (
     <View style={dynamicStyles.container}>
@@ -245,7 +265,7 @@ const MainScreen = ({ navigation }) => {
                   ? selectedMenuCompany.length > 12
                     ? selectedMenuCompany.slice(0, 12) + '...'
                     : selectedMenuCompany
-                  : 'Kmivo'}
+                  : 'KKS'}
               </Text>
             </View>
             <View style={dynamicStyles.headerActions}>
@@ -258,6 +278,25 @@ const MainScreen = ({ navigation }) => {
               <View style={dynamicStyles.themeIcon}>
                 <ThemeDropdown />
               </View>
+
+              {/* Menu Toggle Switch */}
+              <Switch
+                value={showMenu}
+                onValueChange={setShowMenu}
+                trackColor={{
+                  false: 'rgba(255, 255, 255, 0.3)',
+                  true: theme.colors.secondary || '#FFFFFF',
+                }}
+                thumbColor={showMenu ? '#FFFFFF' : '#f4f3f4'}
+                ios_backgroundColor="rgba(255, 255, 255, 0.2)"
+                style={{
+                  marginLeft: 8,
+                  transform:
+                    Platform.OS === 'ios'
+                      ? [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                      : [{ scaleX: 0.9 }, { scaleY: 0.9 }],
+                }}
+              />
 
               {/* Logout */}
               <TouchableOpacity
@@ -283,52 +322,68 @@ const MainScreen = ({ navigation }) => {
         contentContainerStyle={dynamicStyles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* ATTENDANCE SECTION (Beautiful full-width banner) */}
-        <TouchableOpacity
-          style={dynamicStyles.attendanceCard}
-          onPress={() => navigation.navigate('HCMAttendance')}
-          activeOpacity={0.7}
-        >
-          <View style={dynamicStyles.attendanceIconContainer}>
-            <Icon
-              name="calendar-number"
-              size={24}
-              color={theme.colors.success}
-            />
-          </View>
-          <View style={dynamicStyles.attendanceTextContainer}>
-            <Text style={dynamicStyles.attendanceTitle}>Mark Attendance</Text>
-            <Text style={dynamicStyles.attendanceSubtitle}>
-              Tap to check-in or out for the day
+        {showMenu ? (
+          <>
+            {chunkArray(menuItems, 2).map((row, rowIndex) => (
+              <View key={rowIndex} style={dynamicStyles.gridRow}>
+                {row.map(item => renderCard(item))}
+              </View>
+            ))}
+          </>
+        ) : (
+          <>
+            {/* ATTENDANCE SECTION (Beautiful full-width banner) */}
+            <TouchableOpacity
+              style={dynamicStyles.attendanceCard}
+              onPress={() => navigation.navigate('HCMAttendance')}
+              activeOpacity={0.7}
+            >
+              <View style={dynamicStyles.attendanceIconContainer}>
+                <Icon
+                  name="calendar-number"
+                  size={24}
+                  color={theme.colors.success}
+                />
+              </View>
+              <View style={dynamicStyles.attendanceTextContainer}>
+                <Text style={dynamicStyles.attendanceTitle}>
+                  Mark Attendance
+                </Text>
+                <Text style={dynamicStyles.attendanceSubtitle}>
+                  Tap to check-in or out for the day
+                </Text>
+              </View>
+              <Icon
+                name="chevron-forward-outline"
+                size={18}
+                color={theme.colors.textSecondary}
+              />
+            </TouchableOpacity>
+
+            {/* ORDERS SECTION */}
+            <Text style={dynamicStyles.sectionHeader}>ORDERS</Text>
+            <View style={dynamicStyles.gridRow}>
+              {orderActions.slice(0, 2).map(action => renderCard(action))}
+            </View>
+            <View style={dynamicStyles.gridRow}>
+              {orderActions.slice(2, 4).map(action => renderCard(action))}
+            </View>
+
+            {/* REPORTS SECTION */}
+            <Text style={dynamicStyles.sectionHeader}>REPORTS</Text>
+            <View style={dynamicStyles.gridRow}>
+              {reportActions.map(action => renderCard(action))}
+            </View>
+
+            {/* FIELD EXPENSE & SAMPLE SECTION */}
+            <Text style={dynamicStyles.sectionHeader}>
+              FIELD EXPENSE & SAMPLE
             </Text>
-          </View>
-          <Icon
-            name="chevron-forward-outline"
-            size={18}
-            color={theme.colors.textSecondary}
-          />
-        </TouchableOpacity>
-
-        {/* ORDERS SECTION */}
-        <Text style={dynamicStyles.sectionHeader}>ORDERS</Text>
-        <View style={dynamicStyles.gridRow}>
-          {orderActions.slice(0, 2).map(action => renderCard(action))}
-        </View>
-        <View style={dynamicStyles.gridRow}>
-          {orderActions.slice(2, 4).map(action => renderCard(action))}
-        </View>
-
-        {/* REPORTS SECTION */}
-        <Text style={dynamicStyles.sectionHeader}>REPORTS</Text>
-        <View style={dynamicStyles.gridRow}>
-          {reportActions.map(action => renderCard(action))}
-        </View>
-
-        {/* FIELD EXPENSE & SAMPLE SECTION */}
-        <Text style={dynamicStyles.sectionHeader}>FIELD EXPENSE & SAMPLE</Text>
-        <View style={dynamicStyles.gridRow}>
-          {expense.map(item => renderCard(item))}
-        </View>
+            <View style={dynamicStyles.gridRow}>
+              {expense.map(item => renderCard(item))}
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );

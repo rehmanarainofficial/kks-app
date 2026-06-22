@@ -132,7 +132,7 @@ const LoginScreen = ({ navigation }) => {
               {/* Header Section */}
               <View style={dynamicStyles.header}>
                 <View style={dynamicStyles.logoContainer}>
-                  <Text style={dynamicStyles.logoText}>Kmivo</Text>
+                  <Text style={dynamicStyles.logoText}>KKS</Text>
                   <View
                     style={[
                       dynamicStyles.logoBar,
@@ -190,7 +190,7 @@ const LoginScreen = ({ navigation }) => {
             {/* Footer Links - Outside innerContainer to push to bottom if space allows */}
             <View style={dynamicStyles.footer}>
               <AnimatedTypingText
-                text="Powered by Kmivo"
+                text="Powered by DeSolutions"
                 style={[
                   dynamicStyles.footerText,
                   { color: theme.colors.textSecondary },

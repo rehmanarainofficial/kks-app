@@ -3,7 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { selectIsAuthenticated, restoreSession } from '@store/slices/authSlice';
+import { selectIsAuthenticated, restoreSession, selectCurrentUser } from '@store/slices/authSlice';
+import Geolocation from 'react-native-geolocation-service';
+import { useGetLiveTrackingMutation, useUpdateLiveTrackingMutation } from '@api/portalApi';
+import { getDistance } from 'geolib';
 
 import LoginScreen from '@screens/auth/LoginScreen';
 import MainScreen from '@screens/MainScreen';
@@ -55,14 +58,154 @@ import BalanceSheetReportScreen from '@screens/reporting/BalanceSheetReportScree
 import AttendanceScreen from '@screens/hcm/AttendanceScreen';
 import ExpenseClaimInquiryScreen from '@screens/hcm/ExpenseClaimInquiryScreen';
 import ExpenseClaimScreen from '@screens/hcm/ExpenseClaimScreen';
+import TrackingScreen from '@screens/crm/TrackingScreen';
+import LiveTrackingMapScreen from '@screens/crm/LiveTrackingMapScreen';
 import { LoadingSpinner, CustomHeader } from '@components/common';
 
 const Stack = createNativeStackNavigator();
 
+const getAddressFromCoords = async (lat, lon) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+      {
+        headers: {
+          'User-Agent': 'Desolution-App',
+        },
+      },
+    );
+    const data = await response.json();
+    return data.display_name || 'Unknown Location';
+  } catch (error) {
+    console.log('Error reverse geocoding:', error);
+    return 'Unknown Location';
+  }
+};
+
 const AppNavigator = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectCurrentUser);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [getLiveTracking] = useGetLiveTrackingMutation();
+  const [updateLiveTracking] = useUpdateLiveTrackingMutation();
+
+  // Background Live Location Posting Loop
+  useEffect(() => {
+    let intervalId = null;
+    let fetchSelfIntervalId = null;
+    let selfId = null;
+    let selfEmpCode = null;
+    let lastCoords = null;
+    let lastAddress = 'Unknown Location';
+
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
+    const checkAndStartTracking = async () => {
+      // If we already started tracking, skip
+      if (intervalId) return;
+
+      try {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const userEmpCode = user.emp_code || user.user_id || user.id;
+
+        const res = await getLiveTracking({
+          emp_code: userEmpCode,
+          date: todayStr,
+        }).unwrap();
+
+        if (res && res.status === 'true' && Array.isArray(res.data)) {
+          const selfRecord = res.data.find(
+            emp => emp.EmployeeCode === user.emp_code || 
+                   emp.EmployeeCode === user.user_id || 
+                   emp.EmployeeCode === user.id
+          );
+
+          if (selfRecord) {
+            selfId = selfRecord.id;
+            selfEmpCode = selfRecord.EmployeeCode;
+            console.log('[Live Tracking Background] Found self ID:', selfId, 'EmpCode:', selfEmpCode);
+            
+            // Stop checking since we found it
+            if (fetchSelfIntervalId) {
+              clearInterval(fetchSelfIntervalId);
+              fetchSelfIntervalId = null;
+            }
+
+            // Start posting location every 5 seconds
+            intervalId = setInterval(() => {
+              Geolocation.getCurrentPosition(
+                async position => {
+                  const { latitude, longitude } = position.coords;
+                  const now = new Date();
+                  const dateStr = now.toISOString().split('T')[0];
+                  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+                  let addressName = lastAddress;
+                  let shouldFetchAddress = true;
+
+                  if (lastCoords) {
+                    try {
+                      const distance = getDistance(
+                        { latitude: lastCoords.latitude, longitude: lastCoords.longitude },
+                        { latitude, longitude }
+                      );
+                      if (distance < 15 && lastAddress !== 'Unknown Location') {
+                        shouldFetchAddress = false;
+                      }
+                    } catch (e) {
+                      console.log('Error calculating distance:', e);
+                    }
+                  }
+
+                  if (shouldFetchAddress) {
+                    addressName = await getAddressFromCoords(latitude, longitude);
+                    lastAddress = addressName;
+                    lastCoords = { latitude, longitude };
+                  }
+
+                  try {
+                    await updateLiveTracking({
+                      id: selfId,
+                      EmployeeCode: selfEmpCode,
+                      ActivityDate: dateStr,
+                      ActivityTime: timeStr,
+                      current_location: addressName,
+                      latitude: latitude.toString(),
+                      longitude: longitude.toString(),
+                    }).unwrap();
+                  } catch (err) {
+                    console.log('[Live Tracking Background Update Error]', err);
+                  }
+                },
+                error => {
+                  console.log('[Live Tracking Background Geolocation Error]', error);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+              );
+            }, 5000);
+          }
+        }
+      } catch (err) {
+        console.log('[Live Tracking Background Fetch Self Error]', err);
+      }
+    };
+
+    // Check immediately, and then every 30 seconds until we find ourselves
+    checkAndStartTracking();
+    fetchSelfIntervalId = setInterval(checkAndStartTracking, 30000);
+
+    return () => {
+      if (fetchSelfIntervalId) {
+        clearInterval(fetchSelfIntervalId);
+      }
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isAuthenticated, user, getLiveTracking, updateLiveTracking]);
 
   // Restore session on app start
   useEffect(() => {
@@ -273,6 +416,12 @@ const AppNavigator = () => {
             <Stack.Screen name="ExpenseClaim" component={ExpenseClaimScreen} />
             <Stack.Screen name="HCMDVRInquiry" component={FinanceScreen} />
             <Stack.Screen name="HCMLocalPurchase" component={FinanceScreen} />
+            <Stack.Screen name="TrackingScreen" component={TrackingScreen} />
+            <Stack.Screen
+              name="LiveTrackingMapScreen"
+              component={LiveTrackingMapScreen}
+              options={{ headerShown: false }}
+            />
 
             <Stack.Screen
               name="MfgElectricalJobCards"

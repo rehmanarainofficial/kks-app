@@ -1,10 +1,10 @@
 {
-  "name": "Kmivo",
+  "name": "KKS",
   "displayName": "KKS",
   "android": {
-    "package": "com.kmivo.erp"
+    "package": "com.kks.erp"
   },
   "ios": {
-    "bundleIdentifier": "com.kmivo.erp"
+    "bundleIdentifier": "com.kks.erp"
   }
 }

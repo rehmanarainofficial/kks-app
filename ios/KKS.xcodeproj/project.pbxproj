@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		036D3AC8B510D8F5EB2517E7 /* libPods-Kmivo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B6AE4C28C5DF5129B049F1 /* libPods-Kmivo.a */; };
+		036D3AC8B510D8F5EB2517E7 /* libPods-KKS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B6AE4C28C5DF5129B049F1 /* libPods-KKS.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		4F51E6ECEAF11A2AB8CBFFEE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		59E9F2002AAF413283E48120 /* DancingScript.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 766EF475DAC64D02BAA8D6FF /* DancingScript.ttf */; };
@@ -16,18 +16,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* Kmivo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kmivo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Kmivo/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Kmivo/Info.plist; sourceTree = "<group>"; };
-		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Kmivo/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		15B6AE4C28C5DF5129B049F1 /* libPods-Kmivo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Kmivo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-Kmivo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kmivo.debug.xcconfig"; path = "Target Support Files/Pods-Kmivo/Pods-Kmivo.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-Kmivo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kmivo.release.xcconfig"; path = "Target Support Files/Pods-Kmivo/Pods-Kmivo.release.xcconfig"; sourceTree = "<group>"; };
-		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Kmivo/AppDelegate.swift; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* KKS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KKS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = KKS/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = KKS/Info.plist; sourceTree = "<group>"; };
+		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = KKS/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		15B6AE4C28C5DF5129B049F1 /* libPods-KKS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KKS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-KKS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKS.debug.xcconfig"; path = "Target Support Files/Pods-KKS/Pods-KKS.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-KKS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKS.release.xcconfig"; path = "Target Support Files/Pods-KKS/Pods-KKS.release.xcconfig"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = KKS/AppDelegate.swift; sourceTree = "<group>"; };
 		766EF475DAC64D02BAA8D6FF /* DancingScript.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DancingScript.ttf; path = ../src/assets/fonts/DancingScript.ttf; sourceTree = "<group>"; };
-		77220E011E5A09EDA13E0DCF /* Pods-Kmivo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kmivo.release.xcconfig"; path = "Target Support Files/Pods-Kmivo/Pods-Kmivo.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Kmivo/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		97A4429158616D1A4BE07D1B /* Pods-Kmivo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kmivo.debug.xcconfig"; path = "Target Support Files/Pods-Kmivo/Pods-Kmivo.debug.xcconfig"; sourceTree = "<group>"; };
+		77220E011E5A09EDA13E0DCF /* Pods-KKS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKS.release.xcconfig"; path = "Target Support Files/Pods-KKS/Pods-KKS.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = KKS/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		97A4429158616D1A4BE07D1B /* Pods-KKS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKS.debug.xcconfig"; path = "Target Support Files/Pods-KKS/Pods-KKS.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -36,14 +36,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				036D3AC8B510D8F5EB2517E7 /* libPods-Kmivo.a in Frameworks */,
+				036D3AC8B510D8F5EB2517E7 /* libPods-KKS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* Kmivo */ = {
+		13B07FAE1A68108700A75B9A /* KKS */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -52,14 +52,14 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 			);
-			name = Kmivo;
+			name = KKS;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				15B6AE4C28C5DF5129B049F1 /* libPods-Kmivo.a */,
+				15B6AE4C28C5DF5129B049F1 /* libPods-KKS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -82,7 +82,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* Kmivo */,
+				13B07FAE1A68108700A75B9A /* KKS */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
@@ -97,7 +97,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Kmivo.app */,
+				13B07F961A680F5B00A75B9A /* KKS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,10 +105,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-Kmivo.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-Kmivo.release.xcconfig */,
-				97A4429158616D1A4BE07D1B /* Pods-Kmivo.debug.xcconfig */,
-				77220E011E5A09EDA13E0DCF /* Pods-Kmivo.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-KKS.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-KKS.release.xcconfig */,
+				97A4429158616D1A4BE07D1B /* Pods-KKS.debug.xcconfig */,
+				77220E011E5A09EDA13E0DCF /* Pods-KKS.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -116,9 +116,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* Kmivo */ = {
+		13B07F861A680F5B00A75B9A /* KKS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Kmivo" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "KKS" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
@@ -132,9 +132,9 @@
 			);
 			dependencies = (
 			);
-			name = Kmivo;
-			productName = Kmivo;
-			productReference = 13B07F961A680F5B00A75B9A /* Kmivo.app */;
+			name = KKS;
+			productName = KKS;
+			productReference = 13B07F961A680F5B00A75B9A /* KKS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -150,7 +150,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Kmivo" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "KKS" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -163,7 +163,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Kmivo */,
+				13B07F861A680F5B00A75B9A /* KKS */,
 			);
 		};
 /* End PBXProject section */
@@ -205,15 +205,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
@@ -231,7 +231,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Kmivo-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-KKS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -244,15 +244,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kmivo/Pods-Kmivo-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KKS/Pods-KKS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -271,7 +271,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 97A4429158616D1A4BE07D1B /* Pods-Kmivo.debug.xcconfig */;
+			baseConfigurationReference = 97A4429158616D1A4BE07D1B /* Pods-KKS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -279,8 +279,8 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = Y2S8G62B78;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Kmivo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Kmivo;
+				INFOPLIST_FILE = KKS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KKS;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -292,9 +292,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kmivo.erp;
-				PRODUCT_NAME = Kmivo;
-				SWIFT_OBJC_BRIDGING_HEADER = "Kmivo/Kmivo-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kks.erp;
+				PRODUCT_NAME = KKS;
+				SWIFT_OBJC_BRIDGING_HEADER = "KKS/KKS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -303,15 +303,15 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 77220E011E5A09EDA13E0DCF /* Pods-Kmivo.release.xcconfig */;
+			baseConfigurationReference = 77220E011E5A09EDA13E0DCF /* Pods-KKS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = Y2S8G62B78;
-				INFOPLIST_FILE = Kmivo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Kmivo;
+				INFOPLIST_FILE = KKS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KKS;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -323,9 +323,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kmivo.erp;
-				PRODUCT_NAME = Kmivo;
-				SWIFT_OBJC_BRIDGING_HEADER = "Kmivo/Kmivo-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kks.erp;
+				PRODUCT_NAME = KKS;
+				SWIFT_OBJC_BRIDGING_HEADER = "KKS/KKS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -484,7 +484,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Kmivo" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "KKS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -493,7 +493,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Kmivo" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "KKS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

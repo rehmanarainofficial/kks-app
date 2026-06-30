@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Linking,
-  Platform,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
@@ -31,7 +29,7 @@ const TrackingScreen = ({ navigation }) => {
   const fetchTrackingData = useCallback(async () => {
     try {
       const todayStr = new Date().toISOString().split('T')[0];
-      const userEmpCode = user?.emp_code || user?.user_id || user?.id || '';
+      const userEmpCode = user?.emp_code || '';
 
       const res = await getLiveTracking({
         emp_code: userEmpCode,
@@ -53,14 +51,12 @@ const TrackingScreen = ({ navigation }) => {
     }
   }, [user, getLiveTracking]);
 
-  // Initial fetch and polling every 10 seconds
   useEffect(() => {
     fetchTrackingData();
     const interval = setInterval(fetchTrackingData, 10000);
     return () => clearInterval(interval);
   }, [fetchTrackingData]);
 
-  // Filter list on search query change
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredEmployees(employees);
@@ -69,8 +65,10 @@ const TrackingScreen = ({ navigation }) => {
       const filtered = employees.filter(
         emp =>
           (emp.name && emp.name.toLowerCase().includes(query)) ||
-          (emp.EmployeeCode && emp.EmployeeCode.toLowerCase().includes(query)) ||
-          (emp.current_location && emp.current_location.toLowerCase().includes(query)),
+          (emp.EmployeeCode &&
+            emp.EmployeeCode.toLowerCase().includes(query)) ||
+          (emp.current_location &&
+            emp.current_location.toLowerCase().includes(query)),
       );
       setFilteredEmployees(filtered);
     }
@@ -108,31 +106,66 @@ const TrackingScreen = ({ navigation }) => {
   const renderItem = ({ item }) => {
     const initials = getInitials(item.name);
     return (
-      <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          },
+        ]}
+      >
         <View style={styles.cardHeader}>
           {/* Avatar */}
-          <View style={[styles.avatar, { backgroundColor: theme.colors.primary + '15' }]}>
-            <Text style={[styles.avatarText, { color: theme.colors.primary }]}>{initials}</Text>
+          <View
+            style={[
+              styles.avatar,
+              { backgroundColor: theme.colors.primary + '15' },
+            ]}
+          >
+            <Text style={[styles.avatarText, { color: theme.colors.primary }]}>
+              {initials}
+            </Text>
           </View>
 
           {/* User Info */}
           <View style={styles.userInfo}>
-            <Text style={[styles.empName, { color: theme.colors.text }]} numberOfLines={1}>
+            <Text
+              style={[styles.empName, { color: theme.colors.text }]}
+              numberOfLines={1}
+            >
               {item.name || 'Unknown Employee'}
             </Text>
             {item.father_name ? (
-              <Text style={[styles.fatherName, { color: theme.colors.textSecondary }]}>
+              <Text
+                style={[
+                  styles.fatherName,
+                  { color: theme.colors.textSecondary },
+                ]}
+              >
                 S/O: {item.father_name}
               </Text>
             ) : null}
-            <Text style={[styles.empCode, { color: theme.colors.textSecondary }]}>
+            <Text
+              style={[styles.empCode, { color: theme.colors.textSecondary }]}
+            >
               Code: {item.EmployeeCode || 'N/A'}
             </Text>
           </View>
 
           {/* Time Badge */}
-          <View style={[styles.timeBadge, { backgroundColor: theme.colors.success + '15' }]}>
-            <Icon name="time-outline" size={13} color={theme.colors.success} style={{ marginRight: 4 }} />
+          <View
+            style={[
+              styles.timeBadge,
+              { backgroundColor: theme.colors.success + '15' },
+            ]}
+          >
+            <Icon
+              name="time-outline"
+              size={13}
+              color={theme.colors.success}
+              style={{ marginRight: 4 }}
+            />
             <Text style={[styles.timeText, { color: theme.colors.success }]}>
               {item.ActivityTime || 'N/A'}
             </Text>
@@ -140,32 +173,82 @@ const TrackingScreen = ({ navigation }) => {
         </View>
 
         {/* Location Info */}
-        <View style={[styles.locationContainer, { borderTopColor: theme.colors.border + '30' }]}>
-          <Icon name="location-outline" size={16} color={theme.colors.secondary} style={styles.locIcon} />
-          <Text style={[styles.locationText, { color: theme.colors.textSecondary }]} numberOfLines={2}>
+        <View
+          style={[
+            styles.locationContainer,
+            { borderTopColor: theme.colors.border + '30' },
+          ]}
+        >
+          <Icon
+            name="location-outline"
+            size={16}
+            color={theme.colors.secondary}
+            style={styles.locIcon}
+          />
+          <Text
+            style={[styles.locationText, { color: theme.colors.textSecondary }]}
+            numberOfLines={2}
+          >
             {item.current_location || 'No location updated'}
           </Text>
         </View>
 
         {/* Coordinates Info */}
         <View style={styles.coordsContainer}>
-          <View style={[styles.coordBadge, { backgroundColor: theme.colors.background, borderColor: theme.colors.border }]}>
-            <Text style={[styles.coordLabel, { color: theme.colors.textSecondary }]}>Lat: </Text>
-            <Text style={[styles.coordValue, { color: theme.colors.text }]}>{item.latitude || 'N/A'}</Text>
+          <View
+            style={[
+              styles.coordBadge,
+              {
+                backgroundColor: theme.colors.background,
+                borderColor: theme.colors.border,
+              },
+            ]}
+          >
+            <Text
+              style={[styles.coordLabel, { color: theme.colors.textSecondary }]}
+            >
+              Lat:{' '}
+            </Text>
+            <Text style={[styles.coordValue, { color: theme.colors.text }]}>
+              {item.latitude || 'N/A'}
+            </Text>
           </View>
-          <View style={[styles.coordBadge, { backgroundColor: theme.colors.background, borderColor: theme.colors.border, marginLeft: 8 }]}>
-            <Text style={[styles.coordLabel, { color: theme.colors.textSecondary }]}>Lon: </Text>
-            <Text style={[styles.coordValue, { color: theme.colors.text }]}>{item.longitude || 'N/A'}</Text>
+          <View
+            style={[
+              styles.coordBadge,
+              {
+                backgroundColor: theme.colors.background,
+                borderColor: theme.colors.border,
+                marginLeft: 8,
+              },
+            ]}
+          >
+            <Text
+              style={[styles.coordLabel, { color: theme.colors.textSecondary }]}
+            >
+              Lon:{' '}
+            </Text>
+            <Text style={[styles.coordValue, { color: theme.colors.text }]}>
+              {item.longitude || 'N/A'}
+            </Text>
           </View>
         </View>
 
         {/* Action Button */}
         <TouchableOpacity
-          style={[styles.trackButton, { backgroundColor: theme.colors.primary }]}
+          style={[
+            styles.trackButton,
+            { backgroundColor: theme.colors.primary },
+          ]}
           onPress={() => handleTrackEmployee(item)}
           activeOpacity={0.8}
         >
-          <Icon name="map-outline" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+          <Icon
+            name="map-outline"
+            size={16}
+            color="#FFFFFF"
+            style={{ marginRight: 6 }}
+          />
           <Text style={styles.trackBtnText}>Show on Map</Text>
         </TouchableOpacity>
       </View>
@@ -173,11 +256,34 @@ const TrackingScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       {/* Search Header */}
-      <View style={[styles.searchContainer, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border }]}>
-        <View style={[styles.searchInputWrapper, { backgroundColor: theme.colors.background, borderColor: theme.colors.border }]}>
-          <Icon name="search-outline" size={20} color={theme.colors.textSecondary} style={{ marginRight: 8 }} />
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: theme.colors.surface,
+            borderBottomColor: theme.colors.border,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.searchInputWrapper,
+            {
+              backgroundColor: theme.colors.background,
+              borderColor: theme.colors.border,
+            },
+          ]}
+        >
+          <Icon
+            name="search-outline"
+            size={20}
+            color={theme.colors.textSecondary}
+            style={{ marginRight: 8 }}
+          />
           <TextInput
             placeholder="Search employee or location..."
             placeholderTextColor={theme.colors.textSecondary}
@@ -187,7 +293,11 @@ const TrackingScreen = ({ navigation }) => {
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Icon name="close-circle" size={18} color={theme.colors.textSecondary} />
+              <Icon
+                name="close-circle"
+                size={18}
+                color={theme.colors.textSecondary}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -197,7 +307,11 @@ const TrackingScreen = ({ navigation }) => {
       {isLoading && employees.length === 0 ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}>Loading live data...</Text>
+          <Text
+            style={[styles.loadingText, { color: theme.colors.textSecondary }]}
+          >
+            Loading live data...
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -216,9 +330,20 @@ const TrackingScreen = ({ navigation }) => {
           }
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Icon name="people-outline" size={60} color={theme.colors.textSecondary + '50'} />
-              <Text style={[styles.emptyText, { color: theme.colors.text }]}>No active employees today</Text>
-              <Text style={[styles.emptySubText, { color: theme.colors.textSecondary }]}>
+              <Icon
+                name="people-outline"
+                size={60}
+                color={theme.colors.textSecondary + '50'}
+              />
+              <Text style={[styles.emptyText, { color: theme.colors.text }]}>
+                No active employees today
+              </Text>
+              <Text
+                style={[
+                  styles.emptySubText,
+                  { color: theme.colors.textSecondary },
+                ]}
+              >
                 Employees who have marked attendance will appear here.
               </Text>
             </View>

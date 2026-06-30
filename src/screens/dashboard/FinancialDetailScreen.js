@@ -149,7 +149,7 @@ const FinancialDetailScreen = ({ route, navigation }) => {
       Toast.show({
         type: 'success',
         text1: 'Saved',
-        text2: 'Files app → On My iPhone → Kmivo',
+        text2: 'Files app → On My iPhone → KKS',
       });
     }
   };

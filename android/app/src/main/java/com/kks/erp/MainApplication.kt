@@ -1,4 +1,4 @@
-package com.kmivo.erp
+package com.kks.erp
 
 import android.app.Application
 import com.facebook.react.PackageList
